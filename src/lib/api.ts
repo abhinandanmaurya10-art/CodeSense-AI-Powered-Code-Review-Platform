@@ -37,12 +37,19 @@ export type AuthResponse = {
   user: User;
 };
 
-const API_BASE_URL = (import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace(
-  /\/$/,
-  "",
-);
+const configuredApiUrl = import.meta.env.VITE_API_URL;
+const API_BASE_URL = (
+  configuredApiUrl ||
+  (import.meta.env.DEV ? "http://localhost:5000/api" : "")
+).replace(/\/$/, "");
 
 async function request<T>(path: string, options: RequestInit = {}, token?: string): Promise<T> {
+  if (!API_BASE_URL) {
+    throw new Error(
+      "The production API URL is not configured. Add VITE_API_URL in Vercel and redeploy.",
+    );
+  }
+
   const headers = new Headers(options.headers);
   headers.set("Content-Type", "application/json");
 

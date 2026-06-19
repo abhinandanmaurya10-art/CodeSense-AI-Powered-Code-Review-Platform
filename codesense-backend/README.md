@@ -37,7 +37,33 @@ Express and MongoDB backend for CodeSense AI, with JWT authentication and AI-pow
    npm run dev
    ```
 
-   For production, use `npm start`.
+For production, use `npm start`.
+
+## Deploy To Vercel
+
+Create a second Vercel project from the same Git repository and set its
+**Root Directory** to `codesense-backend`.
+
+Add these Production environment variables to that backend project:
+
+```env
+GEMINI_API_KEY=your_key
+MONGODB_URI=your_mongo_uri
+JWT_SECRET=use_a_long_random_secret
+```
+
+After deployment, verify:
+
+```text
+https://your-backend-project.vercel.app/api/health
+```
+
+Then add the backend URL to the frontend Vercel project's Production
+environment variables and redeploy the frontend:
+
+```env
+VITE_API_URL=https://your-backend-project.vercel.app/api
+```
 
 ## API
 
